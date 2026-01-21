@@ -8,9 +8,11 @@
   --color-foreground: #111111;
   --color-primary: #111111;
   --color-secondary: #666666;
-  --color-accent: #3b82f6; /* Adjust based on actual theme */
+  --color-accent: #ff5733; 
   --color-surface: #f8fafc;
   --color-border: #e2e8f0;
+
+  --animate-spin-slow: spin 8s linear infinite;
 }
 
 @layer base {
