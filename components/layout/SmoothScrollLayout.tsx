@@ -1,20 +1,35 @@
 "use client";
 
-import { ReactLenis } from "@studio-freight/react-lenis";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Lenis from "lenis";
 
 export default function SmoothScrollLayout({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+            orientation: "vertical",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+        });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+        function raf(time: number) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
 
-  if (!mounted) return <>{children}</>;
+        requestAnimationFrame(raf);
 
-  return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-      {children}
-    </ReactLenis>
-  );
+        return () => {
+            lenis.destroy();
+        };
+    }, []);
+
+    return (
+        <div className="min-h-screen">
+            {children}
+        </div>
+    );
 }
